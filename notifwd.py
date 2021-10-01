@@ -188,13 +188,16 @@ notifwd by Jordan Mann. Starting up... """, end="")
 
     # Send a notification to the Prowl API.
     def send(self):
-        if not Notification.SILENT: print("\nSending notification from", self)
-        r = requests.post("https://api.prowlapp.com/publicapi/add",
+        if not Notification.SILENT:
+            print("\nSending notification from", self)
+
+        if self.app == "Microsoft Teams":
+            r = requests.post("https://api.prowlapp.com/publicapi/add",
                           data={"apikey": Notification.API_KEY, "application": self.app,
                                 "event": self.title, "description": self.text})
         
-        if r.status_code != 200:
-            print("Received unexpected status code", r.status_code, r.reason, "response:\n", r.text)
+            if r.status_code != 200:
+                print("Received unexpected status code", r.status_code, r.reason, "response:\n", r.text)
 
 if __name__ == "__main__":
     Notification.main(argv)
